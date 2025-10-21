@@ -10,8 +10,24 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  base: process.env.NODE_ENV === 'production' ? '/stripe-flow/' : '/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@headlessui/react', '@heroicons/react'],
+        },
+      },
+    },
+  },
   server: {
     port: 3000,
+    host: true,
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
@@ -20,24 +36,8 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          charts: ['recharts'],
-          forms: ['react-hook-form'],
-        },
-      },
-    },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
+  preview: {
+    port: 3000,
+    host: true,
   },
 })
-

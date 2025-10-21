@@ -29,6 +29,16 @@ jobs:
         ports:
           - 5432:5432
 
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -38,6 +48,7 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: maven
 
     - name: Cache Maven dependencies
       uses: actions/cache@v3
@@ -49,7 +60,13 @@ jobs:
     - name: Run backend tests
       run: |
         cd backend
-        mvn clean test
+        mvn clean test -Dspring.profiles.active=test
+      env:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/stripeflow_test
+        SPRING_DATASOURCE_USERNAME: postgres
+        SPRING_DATASOURCE_PASSWORD: postgres
+        SPRING_REDIS_HOST: localhost
+        SPRING_REDIS_PORT: 6379
 
     - name: Generate test report
       uses: dorny/test-reporter@v1
@@ -181,14 +198,14 @@ jobs:
 
     - name: Create test environment
       run: |
-        docker-compose -f docker-compose.yml up -d postgres redis
+        docker-compose -f docker-compose.local.yml up -d postgres redis
         sleep 30
 
     - name: Run integration tests
       run: |
-        docker-compose -f docker-compose.yml run --rm backend mvn test -Dspring.profiles.active=test
+        docker-compose -f docker-compose.local.yml run --rm backend mvn test -Dspring.profiles.active=test
 
     - name: Cleanup
       if: always()
       run: |
-        docker-compose -f docker-compose.yml down -v
+        docker-compose -f docker-compose.local.yml down -v
