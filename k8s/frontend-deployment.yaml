@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stripeflow-frontend
+  namespace: stripeflow
+  labels:
+    app: stripeflow-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stripeflow-frontend
+  template:
+    metadata:
+      labels:
+        app: stripeflow-frontend
+    spec:
+      containers:
+      - name: stripeflow-frontend
+        image: ghcr.io/your-org/stripeflow-frontend:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: VITE_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: stripeflow-config
+              key: VITE_API_URL
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: ghcr-secret

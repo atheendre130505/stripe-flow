@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+  
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+logging:
+  level:
+    com.stripeflow: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+  file:
+    name: /var/log/stripeflow/application.log
+
+api:
+  webhook:
+    signature-secret: ${WEBHOOK_SECRET}
+
+security:
+  api-key:
+    secret: ${API_SECRET}
+

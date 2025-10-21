@@ -1,0 +1,102 @@
+groups:
+- name: stripeflow.rules
+  rules:
+  # High Error Rate
+  - alert: HighErrorRate
+    expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate detected"
+      description: "Error rate is {{ $value }} errors per second"
+
+  # High Response Time
+  - alert: HighResponseTime
+    expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High response time detected"
+      description: "95th percentile response time is {{ $value }} seconds"
+
+  # Database Connection Issues
+  - alert: DatabaseConnectionFailure
+    expr: up{job="postgres"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Database connection failed"
+      description: "PostgreSQL database is not responding"
+
+  # Redis Connection Issues
+  - alert: RedisConnectionFailure
+    expr: up{job="redis"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Redis connection failed"
+      description: "Redis cache is not responding"
+
+  # High Memory Usage
+  - alert: HighMemoryUsage
+    expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 90
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High memory usage detected"
+      description: "Memory usage is {{ $value }}%"
+
+  # High CPU Usage
+  - alert: HighCPUUsage
+    expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High CPU usage detected"
+      description: "CPU usage is {{ $value }}%"
+
+  # Disk Space Low
+  - alert: DiskSpaceLow
+    expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100 > 85
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Disk space is running low"
+      description: "Disk usage is {{ $value }}%"
+
+  # Application Down
+  - alert: ApplicationDown
+    expr: up{job=~"stripeflow-.*"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Application is down"
+      description: "{{ $labels.job }} is not responding"
+
+  # Webhook Delivery Failures
+  - alert: WebhookDeliveryFailures
+    expr: rate(webhook_events_total{status="FAILED"}[5m]) > 0.1
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High webhook delivery failure rate"
+      description: "Webhook failure rate is {{ $value }} failures per second"
+
+  # Payment Processing Failures
+  - alert: PaymentProcessingFailures
+    expr: rate(charges_total{status="FAILED"}[5m]) > 0.05
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High payment processing failure rate"
+      description: "Payment failure rate is {{ $value }} failures per second"
