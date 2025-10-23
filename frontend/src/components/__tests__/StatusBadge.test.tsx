@@ -64,3 +64,5 @@ describe('StatusBadge', () => {
     expect(badge).toHaveClass('bg-green-100', 'text-green-800');
   });
 });
+
+

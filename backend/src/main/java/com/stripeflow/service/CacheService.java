@@ -272,3 +272,5 @@ public class CacheService {
         return redisTemplate.getConnectionFactory().getConnection().info("memory");
     }
 }
+
+

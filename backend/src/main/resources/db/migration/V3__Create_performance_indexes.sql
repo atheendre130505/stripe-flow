@@ -41,3 +41,5 @@ CREATE INDEX idx_charges_analytics ON charges(currency, status, created_at);
 CREATE INDEX idx_subscriptions_analytics ON subscriptions(currency, status, created_at);
 CREATE INDEX idx_refunds_analytics ON refunds(charge_id, status, created_at);
 
+
+

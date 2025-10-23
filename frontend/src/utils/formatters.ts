@@ -86,3 +86,5 @@ export const capitalize = (str: string): string => {
 export const formatStatus = (status: string): string => {
   return status.split('_').map(capitalize).join(' ');
 };
+
+

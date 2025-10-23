@@ -217,3 +217,5 @@ export const CustomerDetail: React.FC<CustomerDetailProps> = ({
     </div>
   );
 };
+
+

@@ -105,3 +105,5 @@ CREATE TRIGGER charges_audit_trigger
     AFTER INSERT OR UPDATE OR DELETE ON charges
     FOR EACH ROW EXECUTE FUNCTION charge_audit_trigger_function();
 
+
+

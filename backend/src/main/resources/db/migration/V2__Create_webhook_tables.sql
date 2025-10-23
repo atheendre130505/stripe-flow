@@ -92,3 +92,5 @@ CREATE TRIGGER update_webhook_events_updated_at BEFORE UPDATE ON webhook_events
 CREATE TRIGGER update_api_keys_updated_at BEFORE UPDATE ON api_keys
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+
+

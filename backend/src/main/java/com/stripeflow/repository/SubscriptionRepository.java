@@ -94,3 +94,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     List<Object[]> calculateRecurringRevenueByCurrency();
 }
 
+
+

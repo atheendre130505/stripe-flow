@@ -128,3 +128,5 @@ describe('DataTable', () => {
     expect(firstRow).not.toHaveClass('cursor-pointer');
   });
 });
+
+

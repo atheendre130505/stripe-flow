@@ -146,3 +146,5 @@ echo "Backend: https://api.stripeflow.com"
 echo "Frontend: https://app.stripeflow.com"
 echo "Grafana: https://grafana.stripeflow.com"
 echo "Prometheus: https://prometheus.stripeflow.com"
+
+

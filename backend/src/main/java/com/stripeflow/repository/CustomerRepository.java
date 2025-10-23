@@ -59,3 +59,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findByEmailContaining(@Param("emailPattern") String emailPattern);
 }
 
+
+

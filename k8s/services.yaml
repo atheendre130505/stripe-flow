@@ -68,3 +68,5 @@ spec:
     targetPort: 6379
     protocol: TCP
   type: ClusterIP
+
+
