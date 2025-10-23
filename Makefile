@@ -82,20 +82,20 @@ test-frontend-coverage:
 # Docker
 docker-build:
 	@echo "Building Docker images..."
-	docker-compose build
+	docker-compose -f docker-compose.local.yml build
 
 docker-up:
 	@echo "Starting services with Docker Compose..."
-	docker-compose up -d
+	docker-compose -f docker-compose.local.yml up -d
 	@echo "Services started. Backend: http://localhost:8080, Frontend: http://localhost:3000"
 
 docker-down:
 	@echo "Stopping Docker Compose services..."
-	docker-compose down
+	docker-compose -f docker-compose.local.yml down
 
 docker-logs:
 	@echo "Showing Docker Compose logs..."
-	docker-compose logs -f
+	docker-compose -f docker-compose.local.yml logs -f
 
 # Build
 build: build-backend build-frontend
@@ -147,11 +147,11 @@ db-reset:
 # Production
 prod-build:
 	@echo "Building for production..."
-	docker-compose -f docker-compose.prod.yml build
+	docker-compose -f docker-compose.local.yml build
 
 prod-up:
 	@echo "Starting production environment..."
-	docker-compose -f docker-compose.prod.yml up -d
+	docker-compose -f docker-compose.local.yml up -d
 
 # Health checks
 health:
